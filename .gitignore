@@ -1,0 +1,11 @@
+*.iml
+*.jar
+*.jpg
+/.idea/
+/out/
+/lib/
+/.gradle/
+/gradle/
+/build/
+/src/main/resources/price.properties
+/src/main/webapp/index.html
