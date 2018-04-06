@@ -9,3 +9,4 @@
 /build/
 /src/main/resources/price.properties
 /src/main/webapp/index.html
+/gradlew*
