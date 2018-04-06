@@ -1,0 +1,49 @@
+group 'by.spk.price'
+version '0.0.1'
+
+apply plugin: 'war'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/org.postgresql/postgresql
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
+
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.5'
+
+    // https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+    compile group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.0'
+
+    // https://mvnrepository.com/artifact/javax.servlet/jstl
+    compile group: 'javax.servlet', name: 'jstl', version: '1.2'
+
+    // https://mvnrepository.com/artifact/org.apache.taglibs/taglibs-standard-impl
+    compile group: 'org.apache.taglibs', name: 'taglibs-standard-impl', version: '1.2.5'
+
+    // https://mvnrepository.com/artifact/com.google.inject/guice
+    //compile group: 'com.google.inject', name: 'guice', version: '4.1.0'
+}
+
+war {
+    archiveName = 'path.war'
+}
+
+task createProperties {
+    doLast {
+        new File("$buildDir/resources/main/version.properties").withWriter { w ->
+            Properties p = new Properties()
+            p['version'] = project.version.toString()
+            p['date'] = new Date().format('yyyy-MM-dd HH-mm')
+            p.store w, null
+        }
+    }
+}
+
+war {
+    dependsOn createProperties
+}
