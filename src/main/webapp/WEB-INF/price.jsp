@@ -134,7 +134,7 @@
                 <c:forEach items="${pageContext.request.getAttribute('prices')}" var="price">
                     <tr>
                         <td class="align-middle" style="width: 140px" align="center">
-                            <a href="${price.urlSearch}=${price.item}" target="_blank">
+                            <a href="${urlSearch}=${price.item}" target="_blank">
                                     ${price.item}
                             </a>
                         </td>
