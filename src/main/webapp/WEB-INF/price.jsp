@@ -105,12 +105,12 @@
                             </div>
                         </div>
                     </th>
-                    <th class="text-primary">Итоговая
+                    <!--<th class="text-primary">Итоговая
                         <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                 data-target="#updateProductModal">
                             Сохранить
                         </button>
-                    </th>
+                    </th>-->
                 </tr>
                 </thead>
                 <!-- Modal -->
@@ -153,7 +153,7 @@
                             <small id="priceNoNDS_${price.idPrice}"></small>
                         </td>
                         <input type="hidden" value="${price.idProd}" name="prod_${price.idPrice}">
-                        <td style="width: 245px">
+                        <!--<td style="width: 245px">
                             <div class="form-row">
                                 <div class="col-sm-5">
                                     <input type="text" id="lastPrice_${price.idPrice}" value="${price.lastPrice}"
@@ -181,7 +181,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </td>
+                        </td>-->
                     </tr>
                 </c:forEach>
                 </tbody>
