@@ -114,7 +114,7 @@ public class PutDAO {
             }
 
         } catch (SQLException e) {
-            throw new IllegalArgumentException("Error add new brand");
+            throw new IllegalArgumentException("Error add new brand\n" + brand);
         }
         return id;
     }
@@ -146,7 +146,7 @@ public class PutDAO {
             }
 
         } catch (SQLException e) {
-            throw new IllegalArgumentException("Error add new product");
+            throw new IllegalArgumentException("Error add new product:\n" + item + "\n" + product);
         }
         return id;
     }
@@ -178,7 +178,7 @@ public class PutDAO {
             }
 
         } catch (SQLException e) {
-            throw new IllegalArgumentException("Error add new category");
+            throw new IllegalArgumentException("Error add new category\n" + category);
         }
         return id;
     }
@@ -210,7 +210,7 @@ public class PutDAO {
             }
 
         } catch (SQLException e) {
-            throw new IllegalArgumentException("Error add new subcategory");
+            throw new IllegalArgumentException("Error add new subcategory\n" + subCategory);
         }
         return id;
     }
