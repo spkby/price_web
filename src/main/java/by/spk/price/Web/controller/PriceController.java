@@ -1,6 +1,7 @@
-package by.spk.price.Web;
+package by.spk.price.Web.controller;
 
-import by.spk.price.Entity.WebPrice;
+import by.spk.price.Web.WebDAO;
+import by.spk.price.entity.WebPrice;
 import by.spk.price.Utils;
 
 import javax.servlet.ServletException;
@@ -12,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/price")
-public class PriceServlet extends HttpServlet {
+public class PriceController extends HttpServlet {
 
     private WebDAO dao;
 

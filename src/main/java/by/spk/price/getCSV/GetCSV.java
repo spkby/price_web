@@ -1,4 +1,4 @@
-package by.spk.price.GetCSV;
+package by.spk.price.getCSV;
 
 import java.io.*;
 

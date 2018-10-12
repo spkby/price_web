@@ -1,7 +1,7 @@
-package by.spk.price.Web;
+package by.spk.price.Web.controller;
 
-import by.spk.price.GetCSV.GetCSV;
-import by.spk.price.PutCSV.PutCSV;
+import by.spk.price.getCSV.GetCSV;
+import by.spk.price.putCSV.PutCSV;
 import by.spk.price.Utils;
 
 import javax.servlet.ServletException;
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/update")
-public class UpdateServlet extends HttpServlet {
+public class UpdateController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

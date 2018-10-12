@@ -1,6 +1,6 @@
-package by.spk.price.PutCSV;
+package by.spk.price.putCSV;
 
-import by.spk.price.Entity.Price;
+import by.spk.price.entity.Price;
 import by.spk.price.Utils;
 
 import java.io.*;

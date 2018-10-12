@@ -1,7 +1,7 @@
 package by.spk.price.Web;
 
-import by.spk.price.Entity.WebProduct;
-import by.spk.price.Entity.WebPrice;
+import by.spk.price.entity.WebProduct;
+import by.spk.price.entity.WebPrice;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -80,7 +80,7 @@ public class WebDAO {
         return value;
     }
 
-    public List<WebPrice> show(int offset, int limit, String where) {
+    /*public List<WebPrice> show(int offset, int limit, String where) {
         List<WebPrice> prices = new ArrayList<>();
         try {
             ResultSet rows;
@@ -120,7 +120,7 @@ public class WebDAO {
             throw new IllegalArgumentException("Error get Prices: " + e.getMessage());
         }
         return prices;
-    }
+    }*/
 
     public List<WebPrice> show(String where) {
         List<WebPrice> prices = new ArrayList<>();

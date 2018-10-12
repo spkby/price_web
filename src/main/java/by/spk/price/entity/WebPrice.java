@@ -1,4 +1,4 @@
-package by.spk.price.Entity;
+package by.spk.price.entity;
 
 public class WebPrice {
 

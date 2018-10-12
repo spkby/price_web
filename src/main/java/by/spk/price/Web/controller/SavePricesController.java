@@ -1,10 +1,10 @@
-package by.spk.price.Web;
+package by.spk.price.Web.controller;
 
-import by.spk.price.Entity.WebProduct;
+import by.spk.price.Web.WebDAO;
+import by.spk.price.entity.WebProduct;
 import by.spk.price.Utils;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet("/save")
-public class SavePricesServlet extends HttpServlet {
+//@WebServlet("/save")
+public class SavePricesController extends HttpServlet {
 
     private WebDAO dao;
 

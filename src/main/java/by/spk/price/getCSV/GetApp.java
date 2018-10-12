@@ -1,8 +1,8 @@
-package by.spk.price.GetCSV;
+package by.spk.price.getCSV;
 
 import java.io.IOException;
 
-public class main {
+public class GetApp {
 
     public static void main(String[] args) throws IOException {
 

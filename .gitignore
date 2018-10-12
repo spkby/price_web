@@ -10,3 +10,4 @@
 /src/main/resources/price.properties
 /src/main/webapp/index.html
 /gradlew*
+/src/main/resources/version.properties

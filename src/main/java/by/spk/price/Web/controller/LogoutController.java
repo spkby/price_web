@@ -1,4 +1,4 @@
-package by.spk.price.Web;
+package by.spk.price.Web.controller;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/logout")
-public class LogoutServlet extends HttpServlet {
+public class LogoutController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

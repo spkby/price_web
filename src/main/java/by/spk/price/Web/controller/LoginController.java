@@ -1,4 +1,4 @@
-package by.spk.price.Web;
+package by.spk.price.Web.controller;
 
 import by.spk.price.Utils;
 
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/login")
-public class LoginServlet extends HttpServlet {
+public class LoginController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -30,9 +30,13 @@ public class LoginServlet extends HttpServlet {
 
         if (name.equals(Utils.getPropertiesValue("web_login"))
                 && password.equals(Utils.getPropertiesValue("web_password"))) {
-            resp.addCookie(new Cookie(Utils.getPropertiesValue("web_cookie_key"),
-                    Utils.getPropertiesValue("web_cookie_value")));
-            resp.sendRedirect(Utils.getPropertiesValue("web_url_path") + "/");
+
+            Cookie cookie = new Cookie(Utils.getPropertiesValue("web_cookie_key"), Utils.getPropertiesValue("web_cookie_value"));
+            cookie.setPath("/");
+            cookie.setMaxAge(3600);
+            resp.addCookie(cookie);
+
+            resp.sendRedirect(Utils.getPropertiesValue("web_url_path") + "/price");
         } else {
             resp.setStatus(500);
             req.setAttribute("error", true);

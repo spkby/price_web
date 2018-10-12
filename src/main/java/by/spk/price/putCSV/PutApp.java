@@ -1,9 +1,9 @@
-package by.spk.price.PutCSV;
+package by.spk.price.putCSV;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class main {
+public class PutApp {
 
     public static void main(String[] args) throws SQLException, IOException {
 
