@@ -1,6 +1,6 @@
-package by.spk.price.Web.controller;
+package by.spk.price.web.controller;
 
-import by.spk.price.Web.WebDAO;
+import by.spk.price.web.WebDAO;
 import by.spk.price.entity.WebProduct;
 import by.spk.price.Utils;
 

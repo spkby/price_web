@@ -1,6 +1,6 @@
 package by.spk.price;
 
-import by.spk.price.Web.WebDAO;
+import by.spk.price.web.WebDAO;
 
 import java.io.IOException;
 import java.sql.Connection;

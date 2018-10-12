@@ -1,4 +1,4 @@
-package by.spk.price.Web.controller;
+package by.spk.price.web.controller;
 
 import by.spk.price.getCSV.GetCSV;
 import by.spk.price.putCSV.PutCSV;

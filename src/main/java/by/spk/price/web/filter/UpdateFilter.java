@@ -1,4 +1,4 @@
-package by.spk.price.Web.filter;
+package by.spk.price.web.filter;
 
 import javax.servlet.annotation.WebFilter;
 

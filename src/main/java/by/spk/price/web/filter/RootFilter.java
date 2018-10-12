@@ -1,4 +1,4 @@
-package by.spk.price.Web.filter;
+package by.spk.price.web.filter;
 
 import by.spk.price.Utils;
 
@@ -7,10 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 @WebFilter("/")
 public class RootFilter extends HttpFilter {

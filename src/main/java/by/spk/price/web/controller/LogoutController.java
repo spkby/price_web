@@ -1,4 +1,4 @@
-package by.spk.price.Web.controller;
+package by.spk.price.web.controller;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

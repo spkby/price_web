@@ -1,4 +1,4 @@
-package by.spk.price.Web;
+package by.spk.price.web;
 
 import by.spk.price.entity.WebProduct;
 import by.spk.price.entity.WebPrice;
