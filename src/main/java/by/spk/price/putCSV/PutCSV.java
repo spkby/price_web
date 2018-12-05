@@ -31,8 +31,12 @@ public final class PutCSV {
                         new FileInputStream(new File(Utils.getPropertiesValue("csv.local.file"))),
                         "Windows-1251"))) {
 
+//            new FileInputStream(new File(Utils.getPropertiesValue("csv.local.file")))
+//        },"Windows-1251"))) {
+
             reader.readLine(); // skip first line
             while ((line = reader.readLine()) != null) {
+
                 line = line.replace("\"", "");
 
                 strings = line.split(";");
@@ -49,7 +53,7 @@ public final class PutCSV {
                 // Название (артикул) товара
                 price.setProductId(putDao.getProductId(strings[3], strings[4]));
                 // Цена
-                price.setRecommendedPrice(Double.parseDouble(strings[5]));
+                price.setRecommendedPrice((int) (Double.parseDouble(strings[5]) * 100));
 
                 if (!prices.contains(price)) {
                     prices.add(price);

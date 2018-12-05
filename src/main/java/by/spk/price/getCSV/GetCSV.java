@@ -42,6 +42,9 @@ public final class GetCSV {
 
             HttpEntity entity = response.getEntity();
             if (entity != null) {
+
+                System.out.println("start save file");
+
                 try (BufferedInputStream bis = new BufferedInputStream(entity.getContent());
                      BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(new File(pathFile)))) {
                     int inByte;
@@ -49,6 +52,8 @@ public final class GetCSV {
                         bos.write(inByte);
                     }
                 }
+                System.out.println("finish save file");
+
             }
 
         } catch (IOException e) {

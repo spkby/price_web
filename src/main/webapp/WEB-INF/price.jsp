@@ -81,7 +81,7 @@
 </div>
 
 <c:if test="${product != null}">
-    <form id="upd" action="<c:url value='/save'/>" method="post">
+    <%--<form id="upd" action="<c:url value='/save'/>" method="post">--%>
         <div class="container-fluid">
             <table class="table table-bordered table-sm table-striped">
                 <thead>
@@ -131,7 +131,7 @@
                     </div>
                 </div>
                 <tbody>
-                <c:forEach items="${pageContext.request.getAttribute('prices')}" var="price">
+                <c:forEach items="${prices}" var="price">
                     <tr>
                         <td class="align-middle" style="width: 140px" align="center">
                             <a href="${urlSearch}=${price.item}" target="_blank">
@@ -153,40 +153,11 @@
                             <small id="priceNoNDS_${price.idPrice}"></small>
                         </td>
                         <input type="hidden" value="${price.idProd}" name="prod_${price.idPrice}">
-                        <!--<td style="width: 245px">
-                            <div class="form-row">
-                                <div class="col-sm-5">
-                                    <input type="text" id="lastPrice_${price.idPrice}" value="${price.lastPrice}"
-                                           onkeypress="return isNumber(event)" onkeyup="calcPercent(${price.idPrice})"
-                                           class="form-control form-control-sm" name="lastPrice_${price.idPrice}"
-                                           maxlength="6">
-                                </div>
-                                <div class="col-sm-4">
-                                    <input type="text" value="${price.percent}" class="form-control form-control-sm"
-                                           id="percent_${price.idPrice}"
-                                           placeholder="%" name="percent_${price.idPrice}" maxlength="4"
-                                           onkeypress="return isNumber(event)"
-                                           onkeyup="calcLastPrice(${price.idPrice})">
-                                </div>
-                                <div class="col">
-                                    <div class="btn-group btn-group-sm" role="group">
-                                        <button type="button" class="btn btn-primary"
-                                                onclick="increase(${price.idPrice})">
-                                            +
-                                        </button>
-                                        <button type="button" class="btn btn-primary"
-                                                onclick="decrease(${price.idPrice})">
-                                            -
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>-->
                     </tr>
                 </c:forEach>
                 </tbody>
             </table>
         </div>
-    </form>
+    <%--</form>--%>
 </c:if>
 <%@ include file="footer.jsp" %>

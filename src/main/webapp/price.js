@@ -34,12 +34,12 @@ function decrease(id) {
     calcLastPrice(id);
 }
 
-function calcLastPrice(id) {
-    var percent = parseFloat($('#percent_' + id).val());
-    var price = parseFloat($('#price_' + id).text());
-    var lastPrice = (price * (1 + percent / 100)).toFixed(2);
-    $('#lastPrice_' + id).val(chkNaN(lastPrice));
-}
+// function calcLastPrice(id) {
+//     var percent = parseFloat($('#percent_' + id).val());
+//     var price = parseFloat($('#price_' + id).text());
+//     var lastPrice = (price * (1 + percent / 100)).toFixed(2);
+//     $('#lastPrice_' + id).val(chkNaN(lastPrice));
+// }
 
 function isNumber(evt) {
     evt = (evt) ? evt : window.event;

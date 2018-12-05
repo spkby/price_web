@@ -1,20 +1,22 @@
-db_drv=org.postgresql.Driver
-db_url=jdbc:postgresql://localhost:5432/price_db
-db_username=user
-db_password=pass
+db.drv=com.mysql.cj.jdbc.Driver
+db.url=jdbc:mysql://localhost:3306/price_db?characterEncoding=UTF-8
+db.user=root
+db.pass=pass
 
-csv_login=login
-csv_password=password
-csv_formlogin=form[login]
-csv_formpassword=form[password]
-csv_urllogin=http://domain.com/path_to_signin/
-csv_urlfile=http://domain.com/path_to_export/
+csv.login=login
+csv.pass=password
+csv.form.login=form[login]
+csv.form.password=form[password]
+csv.url.login=http://domain.com/path.to_signin/
+csv.url.file=http://domain.com/path_to_export/
 
-csv_filepath=catalog.csv
+csv.local.file=catalog.csv
 
-web_login=login
-web_password=pass
-web_url_search=http://domain.com/path/?query
-web_url_domain=domain.com
-web_cookie_key=cookie_key
-web_cookie_value=cookie_value
+web.login=login
+web.password=pass
+
+web.url.search=http://domain.com/path/?query
+web.url.domain=domain.com
+
+web.cookie.key=cookie.key
+web.cookie.value=cookie.value

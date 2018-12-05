@@ -15,7 +15,7 @@ public class PutDAO {
     private Map<String, Integer> subCategories;
     private Map<String, Integer> products;
 
-    private static final String UPDATE_VALUE = "UPDATE data SET val = ? WHERE key = ?;";
+    private static final String UPDATE_VALUE = "UPDATE datas SET data_value = ? WHERE data_key = ?;";
 
     private static final String GET_BRANDS = "SELECT * FROM brands";
     private static final String GET_CATEGORIES = "SELECT * FROM categories";
@@ -29,7 +29,7 @@ public class PutDAO {
 
     private static final String CLEAR_PRICES = "DELETE FROM prices";
     private static final String ADD_PRICE = "INSERT INTO prices (brand_id, category_id, subcategory_id,"
-            + "product_id,recommendedprice) VALUES(?,?,?,?,?)";
+            + "product_id,recommended) VALUES(?,?,?,?,?)";
 
     protected Connection getConnection() {
         return JdbcConnection.getInstance();
@@ -66,8 +66,8 @@ public class PutDAO {
 
         try {
             statement = getConnection().prepareStatement(UPDATE_VALUE);
-            statement.setString(1, value);
-            statement.setString(2, key);
+            statement.setNString(1, value);
+            statement.setNString(2, key);
             statement.execute();
 
         } catch (SQLException e) {
@@ -96,7 +96,7 @@ public class PutDAO {
         try {
             statement = getConnection().prepareStatement(ADD_BRAND, Statement.RETURN_GENERATED_KEYS);
 
-            statement.setString(1, brand);
+            statement.setNString(1, brand);
             statement.executeUpdate();
 
             key = statement.getGeneratedKeys();
@@ -134,8 +134,8 @@ public class PutDAO {
         try {
             statement = getConnection().prepareStatement(ADD_PRODUCT, Statement.RETURN_GENERATED_KEYS);
 
-            statement.setString(1, item);
-            statement.setString(2, product);
+            statement.setNString(1, item);
+            statement.setNString(2, product);
             statement.executeUpdate();
 
             key = statement.getGeneratedKeys();
@@ -172,7 +172,7 @@ public class PutDAO {
         try {
             statement = getConnection().prepareStatement(ADD_CATEGORY, Statement.RETURN_GENERATED_KEYS);
 
-            statement.setString(1, category);
+            statement.setNString(1, category);
             statement.executeUpdate();
 
             key = statement.getGeneratedKeys();
@@ -210,6 +210,7 @@ public class PutDAO {
         try {
             statement = getConnection().prepareStatement(ADD_SUBCATEGORY, Statement.RETURN_GENERATED_KEYS);
 
+//            statement.setString(1, "Тест");
             statement.setString(1, subCategory);
             statement.executeUpdate();
 
@@ -238,7 +239,7 @@ public class PutDAO {
                 statement.setInt(2, price.getCategoryId());
                 statement.setInt(3, price.getSubCategoryId());
                 statement.setInt(4, price.getProductId());
-                statement.setDouble(5, price.getRecommendedPrice());
+                statement.setInt(5, price.getRecommendedPrice());
                 statement.addBatch();
             }
             statement.executeBatch();
@@ -246,7 +247,7 @@ public class PutDAO {
             getConnection().commit();
 
         } catch (SQLException e) {
-            throw new IllegalArgumentException("Error add new prices");
+            throw new IllegalArgumentException("Error add new prices" + "\n" + e);
         } finally {
             close(statement, null);
         }
