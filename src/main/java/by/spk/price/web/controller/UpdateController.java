@@ -2,7 +2,6 @@ package by.spk.price.web.controller;
 
 import by.spk.price.getCSV.GetCSV;
 import by.spk.price.putCSV.PutCSV;
-import by.spk.price.Utils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,7 +14,8 @@ import java.io.IOException;
 public class UpdateController extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
+            throws ServletException, IOException {
 
         try {
             GetCSV.get();
@@ -25,6 +25,6 @@ public class UpdateController extends HttpServlet {
             throw new IllegalStateException("Error Update Data: " + e.getMessage());
         }
 
-        resp.sendRedirect(Utils.getPropertiesValue("web_url_path") + "/price?updated=ok");
+        resp.sendRedirect(getServletContext().getContextPath() + "/price?updated=ok");
     }
 }

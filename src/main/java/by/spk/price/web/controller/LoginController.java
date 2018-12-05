@@ -14,7 +14,8 @@ import java.io.IOException;
 public class LoginController extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
+            throws ServletException, IOException {
 
         req.setAttribute("ver", Utils.getVersion());
         req.setAttribute("title", "login");
@@ -23,20 +24,22 @@ public class LoginController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
+            throws ServletException, IOException {
 
         String name = req.getParameter("login");
         String password = req.getParameter("password");
 
-        if (name.equals(Utils.getPropertiesValue("web_login"))
-                && password.equals(Utils.getPropertiesValue("web_password"))) {
+        if (name.equals(Utils.getPropertiesValue("web.login"))
+                && password.equals(Utils.getPropertiesValue("web.password"))) {
 
-            Cookie cookie = new Cookie(Utils.getPropertiesValue("web_cookie_key"), Utils.getPropertiesValue("web_cookie_value"));
-            cookie.setPath("/");
+            final Cookie cookie = new Cookie(Utils.getPropertiesValue("web.cookie.key"),
+                    Utils.getPropertiesValue("web.cookie.value"));
+            cookie.setPath(getServletContext().getContextPath());
             cookie.setMaxAge(3600);
             resp.addCookie(cookie);
 
-            resp.sendRedirect(Utils.getPropertiesValue("web_url_path") + "/price");
+            resp.sendRedirect(getServletContext().getContextPath() + "/price");
         } else {
             resp.setStatus(500);
             req.setAttribute("error", true);

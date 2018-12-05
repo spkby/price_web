@@ -1,3 +1,4 @@
+db_drv=org.postgresql.Driver
 db_url=jdbc:postgresql://localhost:5432/price_db
 db_username=user
 db_password=pass
@@ -15,6 +16,5 @@ web_login=login
 web_password=pass
 web_url_search=http://domain.com/path/?query
 web_url_domain=domain.com
-web_url_path=/path
 web_cookie_key=cookie_key
 web_cookie_value=cookie_value

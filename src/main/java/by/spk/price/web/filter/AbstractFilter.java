@@ -13,15 +13,16 @@ import java.io.IOException;
 public class AbstractFilter extends HttpFilter {
 
     @Override
-    protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
+    protected void doFilter(final HttpServletRequest req, final HttpServletResponse res, final FilterChain chain)
+            throws IOException, ServletException {
 
         boolean isLogged = false;
 
         Cookie[] cookies = req.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(Utils.getPropertiesValue("web_cookie_key")) &&
-                        cookie.getValue().equals(Utils.getPropertiesValue("web_cookie_value"))) {
+                if (cookie.getName().equals(Utils.getPropertiesValue("web.cookie.key"))
+                        && cookie.getValue().equals(Utils.getPropertiesValue("web.cookie.value"))) {
                     isLogged = true;
                     break;
                 }
@@ -33,7 +34,7 @@ public class AbstractFilter extends HttpFilter {
         } else {
             res.setStatus(401);
             res.getWriter().println("Forbidden");
-            res.sendRedirect(Utils.getPropertiesValue("web_url_path") + "/login");
+            res.sendRedirect(getServletContext().getContextPath() + "/login");
         }
     }
 }

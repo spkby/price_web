@@ -18,7 +18,8 @@ public class PriceController extends HttpServlet {
     private WebDAO dao;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
+            throws ServletException, IOException {
 
         /*int limit = 1000;
         int offset = 0;
@@ -43,12 +44,12 @@ public class PriceController extends HttpServlet {
 
         Boolean updated = false;
 
-        String str = req.getParameter("updated");
+        final String str = req.getParameter("updated");
         if (str != null && !str.isEmpty()) {
             updated = true;
         }
 
-        String product = req.getParameter("product");
+        final String product = req.getParameter("product");
         if (product != null && !product.isEmpty()) {
             //List<WebPrice> prices = dao.show(offset, limit, product.trim());
             List<WebPrice> prices = dao.show(product.trim());
@@ -60,8 +61,8 @@ public class PriceController extends HttpServlet {
 
         //
 
-        req.setAttribute("urlDomain", Utils.getPropertiesValue("web_url_domain"));
-        req.setAttribute("urlSearch", Utils.getPropertiesValue("web_url_search"));
+        req.setAttribute("urlDomain", Utils.getPropertiesValue("web.url.domain"));
+        req.setAttribute("urlSearch", Utils.getPropertiesValue("web.url.search"));
         req.setAttribute("title", "price");
         req.setAttribute("dateUpdated", dao.getValue("updated"));
         req.setAttribute("ver", Utils.getVersion());
@@ -71,7 +72,7 @@ public class PriceController extends HttpServlet {
 
     @Override
     public void init() {
-        dao = Utils.getDAO();
+        dao = new WebDAO();
     }
 }
 

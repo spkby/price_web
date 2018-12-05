@@ -51,21 +51,21 @@ public class Price {
     }
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Price price = (Price) o;
-        return brandId == price.brandId &&
-                categoryId == price.categoryId &&
-                subCategoryId == price.subCategoryId &&
-                productId == price.productId &&
-                Double.compare(price.recommendedPrice, recommendedPrice) == 0;
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(brandId, categoryId, subCategoryId, productId, recommendedPrice);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Price price = (Price) o;
+//        return brandId == price.brandId &&
+//                categoryId == price.categoryId &&
+//                subCategoryId == price.subCategoryId &&
+//                productId == price.productId &&
+//                Double.compare(price.recommendedPrice, recommendedPrice) == 0;
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//
+//        return Objects.hash(brandId, categoryId, subCategoryId, productId, recommendedPrice);
+//    }
 }

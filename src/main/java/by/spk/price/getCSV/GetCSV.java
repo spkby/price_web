@@ -10,64 +10,53 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClients;
 
+public final class GetCSV {
 
-public class GetCSV {
-
-    private static String login;
-    private static String password;
-    private static String formLogin;
-    private static String formPassword;
-    private static String urlLogin;
-    private static String urlFile;
-    private static String pathFile;
-
-    private static void init() throws IOException {
-
-        login = Utils.getPropertiesValue("csv_login");
-        password = Utils.getPropertiesValue("csv_password");
-        formLogin = Utils.getPropertiesValue("csv_formlogin");
-        formPassword = Utils.getPropertiesValue("csv_formpassword");
-        urlLogin = Utils.getPropertiesValue("csv_urllogin");
-        urlFile = Utils.getPropertiesValue("csv_urlfile");
-        pathFile = Utils.getPropertiesValue("csv_filepath");
+    private GetCSV() {
     }
 
-    public static void get() throws IOException {
+    public static void get() {
 
-        init();
-
-        HttpClient httpClient = HttpClients.createDefault();
-
-        HttpPost httpPost = new HttpPost(urlLogin + "?" +
-                formLogin + "=" + login + "&" +
-                formPassword + "=" + password);
-
-        HttpResponse response;
+        HttpClient httpClient = null;
         try {
-            response = httpClient.execute(httpPost);
-        } catch (IOException ex) {
-            throw ex;
-        }
+            final String login = Utils.getPropertiesValue("csv.login");
+            final String password = Utils.getPropertiesValue("csv.pass");
+            final String formLogin = Utils.getPropertiesValue("csv.form.login");
+            final String formPassword = Utils.getPropertiesValue("csv.form.password");
+            final String urlLogin = Utils.getPropertiesValue("csv.url.login");
+            final String urlFile = Utils.getPropertiesValue("csv.url.file");
+            final String pathFile = Utils.getPropertiesValue("csv.local.file");
 
-        // if (response != null) response.getEntity().consumeContent();
+            httpClient = HttpClients.createDefault();
+            HttpResponse response;
 
-        HttpGet httpget = new HttpGet(urlFile);
-        response = httpClient.execute(httpget);
+            HttpPost httpPost = new HttpPost(urlLogin + "?"
+                    + formLogin + "=" + login + "&" + formPassword + "=" + password);
 
-        HttpEntity entity = response.getEntity();
-        if (entity != null) {
-            try (BufferedInputStream bis = new BufferedInputStream(entity.getContent());
-                 BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(new File(pathFile)))) {
-                int inByte;
-                while ((inByte = bis.read()) != -1) {
-                    bos.write(inByte);
+            // login
+            httpClient.execute(httpPost);
+//            if (response != null) response.getEntity().consumeContent();
+
+            HttpGet httpget = new HttpGet(urlFile);
+            response = httpClient.execute(httpget);
+
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                try (BufferedInputStream bis = new BufferedInputStream(entity.getContent());
+                     BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(new File(pathFile)))) {
+                    int inByte;
+                    while ((inByte = bis.read()) != -1) {
+                        bos.write(inByte);
+                    }
                 }
-            } catch (IOException | RuntimeException ex) {
-                httpget.abort();
-                throw ex;
             }
-            //  httpClient.getConnectionManager().shutdown();
+
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
         }
+//        finally {
+//            httpClient.getConnectionManager().shutdown();
+//        }
     }
 }
 

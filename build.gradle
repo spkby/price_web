@@ -1,5 +1,5 @@
 group 'by.spk.price'
-version '0.0.2'
+version '0.0.3'
 
 apply plugin: 'war'
 
@@ -30,7 +30,7 @@ dependencies {
 }
 
 war {
-    archiveName = 'pila.war'
+    archiveName = 'pila_new.war'
 }
 
 task createProperties {

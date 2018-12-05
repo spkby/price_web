@@ -58,11 +58,11 @@ public class SavePricesController extends HttpServlet {
             throw new IllegalStateException("Error Set New Products: " + e.getMessage());
         }
 
-        res.sendRedirect(Utils.getPropertiesValue("web_url_path") + "/price");
+        res.sendRedirect(getServletContext().getContextPath() + "/price");
     }
 
     @Override
     public void init() throws ServletException {
-        dao = Utils.getDAO();
+        dao = new WebDAO();
     }
 }

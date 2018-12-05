@@ -4,18 +4,22 @@ import by.spk.price.entity.Price;
 import by.spk.price.Utils;
 
 import java.io.*;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class PutCSV {
+public final class PutCSV {
 
-    public static void put() throws IOException, SQLException {
+    private PutCSV() {
+    }
+
+    public static void put() {
 
         PutDAO putDao = new PutDAO();
+        putDao.init();
+
         List<Price> prices = new ArrayList<>();
 
         String line;
@@ -24,7 +28,7 @@ public class PutCSV {
 
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(
-                        new FileInputStream(new File(Utils.getPropertiesValue("csv_filepath"))),
+                        new FileInputStream(new File(Utils.getPropertiesValue("csv.local.file"))),
                         "Windows-1251"))) {
 
             reader.readLine(); // skip first line
@@ -51,10 +55,14 @@ public class PutCSV {
                     prices.add(price);
                 }
             }
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
         }
+
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm");
         formatter.setTimeZone(TimeZone.getTimeZone("Europe/Minsk"));
         putDao.setValue("updated", formatter.format(new Date()));
         putDao.addPrices(prices);
+        putDao.finish();
     }
 }

@@ -1,5 +1,6 @@
 package by.spk.price.web;
 
+import by.spk.price.JdbcConnection;
 import by.spk.price.entity.WebProduct;
 import by.spk.price.entity.WebPrice;
 
@@ -11,11 +12,11 @@ import java.util.List;
 
 public class WebDAO {
 
-    private static final String PRICE = "select prices.id as id, subcategory, item, product," +
-            " recommendedprice, lastprice, percent, product_id from prices" +
-            " inner join products on prices.product_id = products.id" +
-            " inner join subcategories on prices.subcategory_id = subcategories.id" +
-            " OFFSET ? LIMIT ?;";
+//    private static final String PRICE = "select prices.id as id, subcategory, item, product," +
+//            " recommendedprice, lastprice, percent, product_id from prices" +
+//            " inner join products on prices.product_id = products.id" +
+//            " inner join subcategories on prices.subcategory_id = subcategories.id" +
+//            " OFFSET ? LIMIT ?;";
 
     /*private static final String PRICE_WHERE = "select prices.id as id, subcategory, item, product," +
             " recommendedprice, lastprice, percent, product_id from prices" +
@@ -24,65 +25,74 @@ public class WebDAO {
             " where LOWER(product) like LOWER(?)" +
             " OFFSET ? LIMIT ?;";*/
 
-    private static final String PRICE_WHERE = "select prices.id as id, subcategory, item, product," +
-            " recommendedprice, lastprice, percent, product_id from prices" +
-            " inner join products on prices.product_id = products.id" +
-            " inner join subcategories on prices.subcategory_id = subcategories.id" +
-            " where LOWER(product) like LOWER(?);";
+    private static final String PRICE_WHERE = "select prices.id as id, subcategory, item, product,"
+            + " recommendedprice, lastprice, percent, product_id from prices"
+            + " inner join products on prices.product_id = products.id"
+            + " inner join subcategories on prices.subcategory_id = subcategories.id"
+            + " where LOWER(product) like LOWER(?);";
 
     private static final String UPDATE_PRICE = "update products set lastprice = ?, percent = ? where id = ?;";
     private static final String SELECT_VALUE = "select val from data where key = ?;";
 
-    private PreparedStatement priceStatement;
-    private PreparedStatement priceWhereStatement;
-    private PreparedStatement updatePriceStatement;
-    private PreparedStatement selectValueStatement;
-
-    public WebDAO(Connection connection) {
-        try {
-            priceStatement = connection.prepareStatement(PRICE);
-            priceWhereStatement = connection.prepareStatement(PRICE_WHERE);
-            updatePriceStatement = connection.prepareStatement(UPDATE_PRICE);
-            selectValueStatement = connection.prepareStatement(SELECT_VALUE);
-
-        } catch (SQLException e) {
-            throw new IllegalArgumentException("Error");
-        }
+    public WebDAO() {
     }
 
-    public void savePrices(List<WebProduct> products) {
+    protected Connection getConnection() {
+        return JdbcConnection.getInstance();
+    }
 
+    protected void close(final PreparedStatement statement, final ResultSet resultSet) {
+        JdbcConnection.close(statement, resultSet);
+    }
+
+    public void savePrices(final List<WebProduct> products) {
+        PreparedStatement statement = null;
         try {
+            statement = getConnection().prepareStatement(UPDATE_PRICE);
+
             for (WebProduct prod : products) {
-                updatePriceStatement.setDouble(1, prod.getLastPrice());
-                updatePriceStatement.setInt(3, prod.getId());
-                updatePriceStatement.setDouble(2, prod.getPercent());
-                updatePriceStatement.addBatch();
+                statement.setDouble(1, prod.getLastPrice());
+                statement.setInt(3, prod.getId());
+                statement.setDouble(2, prod.getPercent());
+                statement.addBatch();
             }
-            updatePriceStatement.executeBatch();
+            statement.executeBatch();
         } catch (SQLException e) {
             throw new IllegalArgumentException("Error set new prices: " + e.getMessage());
+        } finally {
+            close(statement, null);
         }
     }
 
-    public String getValue(String key) {
+    public String getValue(final String key) {
         String value = "";
+        PreparedStatement statement = null;
+        ResultSet rows = null;
+
         try {
-            selectValueStatement.setString(1, key);
-            selectValueStatement.execute();
-            ResultSet rows = selectValueStatement.getResultSet();
+            statement = getConnection().prepareStatement(SELECT_VALUE);
+
+            statement.setString(1, key);
+            statement.execute();
+            rows = statement.getResultSet();
             while (rows.next()) {
                 value = rows.getString(1);
             }
+            return value;
+
         } catch (SQLException e) {
             throw new IllegalArgumentException("Error get Value by Key(" + key + "): " + e.getMessage());
+        } finally {
+            close(statement, rows);
         }
-        return value;
     }
 
     /*public List<WebPrice> show(int offset, int limit, String where) {
         List<WebPrice> prices = new ArrayList<>();
+        PreparedStatement statement = null;
+
         try {
+                    priceStatement = getConnection().prepareStatement(PRICE);
             ResultSet rows;
             if (where == null || where.isEmpty()) {
                 priceStatement.setInt(1, offset);
@@ -116,19 +126,26 @@ public class WebDAO {
 
                 prices.add(price);
             }
+        return prices;
         } catch (SQLException e) {
             throw new IllegalArgumentException("Error get Prices: " + e.getMessage());
         }
-        return prices;
+
+        finally {
+            close(statement, rows);
+        }
     }*/
 
-    public List<WebPrice> show(String where) {
+    public List<WebPrice> show(final String where) {
         List<WebPrice> prices = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet rows = null;
         try {
+            statement = getConnection().prepareStatement(PRICE_WHERE);
 
-            priceWhereStatement.setString(1, "%" + where + "%");
-            priceWhereStatement.execute();
-            ResultSet rows = priceWhereStatement.getResultSet();
+            statement.setString(1, "%" + where + "%");
+            statement.execute();
+            rows = statement.getResultSet();
 
             WebPrice price;
 
@@ -149,9 +166,11 @@ public class WebDAO {
 
                 prices.add(price);
             }
+            return prices;
         } catch (SQLException e) {
             throw new IllegalArgumentException("Error get Prices: " + e.getMessage());
+        } finally {
+            close(statement, rows);
         }
-        return prices;
     }
 }
