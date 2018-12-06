@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/price")
-public class PriceController extends HttpServlet {
+@WebServlet("/show")
+public class ShowController extends HttpServlet {
 
     private WebDAO dao;
 
@@ -61,11 +61,11 @@ public class PriceController extends HttpServlet {
 
         //
 
-        req.setAttribute("urlDomain", Utils.getPropertiesValue("web.url.domain"));
-        req.setAttribute("urlSearch", Utils.getPropertiesValue("web.url.search"));
+//        req.setAttribute("urlDomain", Utils.getPropertiesValue("web.url.domain"));
+//        req.setAttribute("urlSearch", Utils.getPropertiesValue("web.url.search"));
         req.setAttribute("title", "price");
         req.setAttribute("dateUpdated", dao.getValue("updated"));
-        req.setAttribute("ver", Utils.getVersion());
+//        req.setAttribute("ver", Utils.getVersion());
 
         req.getServletContext().getRequestDispatcher("/WEB-INF/price.jsp").forward(req, resp);
     }
