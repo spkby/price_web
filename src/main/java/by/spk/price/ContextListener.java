@@ -13,6 +13,11 @@ public class ContextListener implements ServletContextListener {
         // up connect
         JdbcConnection.getInstance();
 
+        sce.getServletContext().setAttribute("ver", Utils.getVersion());
+        sce.getServletContext().setAttribute("urlDomain", Utils.getPropertiesValue("web.url.domain"));
+        sce.getServletContext().setAttribute("urlDomain", Utils.getPropertiesValue("web.url.domain"));
+        sce.getServletContext().setAttribute("urlSearch", Utils.getPropertiesValue("web.url.search"));
+
     }
 
     @Override

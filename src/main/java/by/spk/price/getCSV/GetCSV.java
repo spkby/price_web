@@ -9,6 +9,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClients;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class GetCSV {
 
@@ -17,6 +19,7 @@ public final class GetCSV {
 
     public static void get() {
 
+        final Logger logger = LoggerFactory.getLogger(GetCSV.class);
         HttpClient httpClient = null;
         try {
             final String login = Utils.getPropertiesValue("csv.login");
@@ -33,17 +36,20 @@ public final class GetCSV {
             HttpPost httpPost = new HttpPost(urlLogin + "?"
                     + formLogin + "=" + login + "&" + formPassword + "=" + password);
 
+            logger.info("login to server");
+
             // login
             httpClient.execute(httpPost);
 //            if (response != null) response.getEntity().consumeContent();
 
             HttpGet httpget = new HttpGet(urlFile);
+            logger.info("get file");
             response = httpClient.execute(httpget);
 
             HttpEntity entity = response.getEntity();
             if (entity != null) {
 
-                System.out.println("start save file");
+                logger.info("start save file");
 
                 try (BufferedInputStream bis = new BufferedInputStream(entity.getContent());
                      BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(new File(pathFile)))) {
@@ -52,12 +58,13 @@ public final class GetCSV {
                         bos.write(inByte);
                     }
                 }
-                System.out.println("finish save file");
+                logger.info("finish save file");
 
             }
 
         } catch (IOException e) {
-            throw new IllegalStateException(e);
+            logger.error(e.getMessage());
+            throw new IllegalStateException("Error get file");
         }
 //        finally {
 //            httpClient.getConnectionManager().shutdown();

@@ -42,9 +42,10 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm">
-            <form action="<c:url value='/price'/>" method="get">
+            <form action="<c:url value='/show'/>" method="get">
                 <div class="input-group mb-3">
-                    <input type="text" name="product" value="${product}" class="form-control form-control-sm"
+                    <input type="text" name="product" value="<c:out value="${product}"/>"
+                           class="form-control form-control-sm"
                            placeholder="Продукт">
                     <div class="input-group-append">
                         <input type="submit" value="поиск" class="btn btn-primary btn-sm">
@@ -56,7 +57,7 @@
             <form action="<c:url value='/update'/>" method="post" class="form">
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#updateModal">
-                    Обновить - ${dateUpdated}
+                    Обновить - <c:out value="${dateUpdated}"/>
                 </button>
                 <!-- Modal -->
                 <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel"
@@ -82,82 +83,83 @@
 
 <c:if test="${product != null}">
     <%--<form id="upd" action="<c:url value='/save'/>" method="post">--%>
-        <div class="container-fluid">
-            <table class="table table-bordered table-sm table-striped">
-                <thead>
-                <tr>
-                    <th>Артикул</th>
-                    <th>Продукт</th>
-                    <th class="text-secondary">Цена</th>
-                    <th class="text-info">-23%</th>
-                    <th class="text-success" style="width: 120px">
-                        <div class="form-row">
-                            <div class="col">
-                                <input type="text" value="15" class="form-control form-control-sm" id="percentCommon"
-                                       onkeyup="calcPriceCommonAll()" placeholder="%"
-                                       onkeypress="return isNumber(event)" maxlength="3">
-                            </div>
-                            <div class="col">
-                                <div class="btn-group btn-group-sm" role="group">
-                                    <button type="button" class="btn btn-primary" onclick="increaseCommon()">+</button>
-                                    <button type="button" class="btn btn-primary" onclick="decreaseCommon()">-</button>
-                                </div>
-                            </div>
+    <div class="container-fluid">
+        <table class="table table-bordered table-sm table-striped">
+            <thead>
+            <tr>
+                <th>Артикул</th>
+                <th>Продукт</th>
+                <th class="text-secondary">Цена</th>
+                <th class="text-info">-23%</th>
+                <th class="text-success" style="width: 120px">
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="text" value="15" class="form-control form-control-sm" id="percentCommon"
+                                   onkeyup="calcPriceCommonAll()" placeholder="%"
+                                   onkeypress="return isNumber(event)" maxlength="3">
                         </div>
-                    </th>
-                    <!--<th class="text-primary">Итоговая
-                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                data-target="#updateProductModal">
-                            Сохранить
-                        </button>
-                    </th>-->
-                </tr>
-                </thead>
-                <!-- Modal -->
-                <div class="modal fade" id="updateProductModal" tabindex="-1" role="dialog"
-                     aria-labelledby="updateProductLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="updateProductLabel">Сохранить цены</h5>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-                                <button type="submit" class="btn btn-primary" data-target="#updateProductModal">
-                                    Сохранить
-                                </button>
+                        <div class="col">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button type="button" class="btn btn-primary" onclick="increaseCommon()">+</button>
+                                <button type="button" class="btn btn-primary" onclick="decreaseCommon()">-</button>
                             </div>
                         </div>
                     </div>
+                </th>
+                <!--<th class="text-primary">Итоговая
+                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                            data-target="#updateProductModal">
+                        Сохранить
+                    </button>
+                </th>-->
+            </tr>
+            </thead>
+            <!-- Modal -->
+            <div class="modal fade" id="updateProductModal" tabindex="-1" role="dialog"
+                 aria-labelledby="updateProductLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="updateProductLabel">Сохранить цены</h5>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                            <button type="submit" class="btn btn-primary" data-target="#updateProductModal">
+                                Сохранить
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <tbody>
-                <c:forEach items="${prices}" var="price">
-                    <tr>
-                        <td class="align-middle" style="width: 140px" align="center">
-                            <a href="${urlSearch}=${price.item}" target="_blank">
-                                    ${price.item}
-                            </a>
-                        </td>
-                        <td class="align-middle" align="left">
-                                ${price.product}
-                        </td>
-                        <td style="width: 50px" align="right" class="text-secondary align-middle">
-                            <label>${price.recommendedPrice}</label>
-                        </td>
-                        <td style="width: 50px" align="right" class="text-info align-middle">
-                            <label id="price_${price.idPrice}">${price.ourPrice}</label>
-                        </td>
-                        <td align="right">
-                            <label id="priceCommon_${price.idPrice}" class="priceCommon text-success"
-                                   value="${price.idPrice}"></label>
-                            <small id="priceNoNDS_${price.idPrice}"></small>
-                        </td>
-                        <input type="hidden" value="${price.idProd}" name="prod_${price.idPrice}">
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
-        </div>
+            </div>
+            <tbody>
+            <c:forEach items="${prices}" var="price">
+                <tr>
+                    <td class="align-middle" style="width: 140px" align="center">
+                        <a href="<c:out value='${applicationScope.urlSearch}'/>=<c:out value="${price.item}"/>" target="_blank">
+                                ${price.item}
+                        </a>
+                    </td>
+                    <td class="align-middle" align="left">
+                        <c:out value="${price.product}"/>
+                    </td>
+                    <td style="width: 50px" align="right" class="text-secondary align-middle">
+                        <label><c:out value="${price.recommendedPrice}"/></label>
+                    </td>
+                    <td style="width: 50px" align="right" class="text-info align-middle">
+                        <label id="price_<c:out value='${price.idPrice}'/>"><c:out value='${price.ourPrice}'/></label>
+                    </td>
+                    <td align="right">
+                        <label id="priceCommon_<c:out value='${price.idPrice}'/>" class="priceCommon text-success"
+                               value="<c:out value='${price.idPrice}'/>"></label>
+                        <small id="priceNoNDS_<c:out value='${price.idPrice}'/>"></small>
+                    </td>
+                    <input type="hidden" value="<c:out value='${price.idProd}'/>"
+                           name="prod_<c:out value='${price.idPrice}'/>">
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+    </div>
     <%--</form>--%>
 </c:if>
 <%@ include file="footer.jsp" %>

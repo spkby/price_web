@@ -1,8 +1,9 @@
 package by.spk.price.web;
 
 import by.spk.price.JdbcConnection;
-import by.spk.price.entity.WebProduct;
 import by.spk.price.entity.WebPrice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -21,8 +22,7 @@ public class WebDAO {
     private static final String UPDATE_PRICE = "update products set lastprice = ?, percent = ? where id = ?;";
     private static final String SELECT_VALUE = "select data_value from datas where data_key = ?;";
 
-    public WebDAO() {
-    }
+    private static Logger LOGGER = LoggerFactory.getLogger(WebDAO.class);
 
     protected Connection getConnection() {
         return JdbcConnection.getInstance();
@@ -32,24 +32,24 @@ public class WebDAO {
         JdbcConnection.close(statement, resultSet);
     }
 
-    public void savePrices(final List<WebProduct> products) {
-        PreparedStatement statement = null;
-        try {
-            statement = getConnection().prepareStatement(UPDATE_PRICE);
-
-            for (WebProduct prod : products) {
-                statement.setDouble(1, prod.getLastPrice());
-                statement.setInt(3, prod.getId());
-                statement.setDouble(2, prod.getPercent());
-                statement.addBatch();
-            }
-            statement.executeBatch();
-        } catch (SQLException e) {
-            throw new IllegalArgumentException("Error set new prices: " + e.getMessage());
-        } finally {
-            close(statement, null);
-        }
-    }
+//    public void savePrices(final List<WebProduct> products) {
+//        PreparedStatement statement = null;
+//        try {
+//            statement = getConnection().prepareStatement(UPDATE_PRICE);
+//
+//            for (WebProduct prod : products) {
+//                statement.setDouble(1, prod.getLastPrice());
+//                statement.setInt(3, prod.getId());
+//                statement.setDouble(2, prod.getPercent());
+//                statement.addBatch();
+//            }
+//            statement.executeBatch();
+//        } catch (SQLException e) {
+//            throw new IllegalArgumentException("Error set new prices: " + e.getMessage());
+//        } finally {
+//            close(statement, null);
+//        }
+//    }
 
     public String getValue(final String key) {
         String value = "";
@@ -68,6 +68,7 @@ public class WebDAO {
             return value;
 
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
             throw new IllegalArgumentException("Error get Value by Key(" + key + "): " + e.getMessage());
         } finally {
             close(statement, rows);
@@ -104,6 +105,7 @@ public class WebDAO {
             }
             return prices;
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
             throw new IllegalArgumentException("Error get Prices: " + e.getMessage());
         } finally {
             close(statement, rows);

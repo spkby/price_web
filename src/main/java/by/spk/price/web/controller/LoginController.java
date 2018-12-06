@@ -17,7 +17,7 @@ public class LoginController extends HttpServlet {
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
             throws ServletException, IOException {
 
-        req.setAttribute("ver", Utils.getVersion());
+        //       req.setAttribute("ver", Utils.getVersion());
         req.setAttribute("title", "login");
 
         req.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(req, resp);
@@ -39,7 +39,7 @@ public class LoginController extends HttpServlet {
             cookie.setMaxAge(3600);
             resp.addCookie(cookie);
 
-            resp.sendRedirect(getServletContext().getContextPath() + "/price");
+            resp.sendRedirect(getServletContext().getContextPath() + "/show");
         } else {
             resp.setStatus(500);
             req.setAttribute("error", true);

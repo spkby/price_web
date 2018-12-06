@@ -2,6 +2,8 @@ package by.spk.price.putCSV;
 
 import by.spk.price.entity.Price;
 import by.spk.price.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -26,13 +28,14 @@ public final class PutCSV {
         String[] strings;
         Price price;
 
+        final Logger logger = LoggerFactory.getLogger(PutCSV.class);
+
+
+        logger.info("read file");
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(
                         new FileInputStream(new File(Utils.getPropertiesValue("csv.local.file"))),
                         "Windows-1251"))) {
-
-//            new FileInputStream(new File(Utils.getPropertiesValue("csv.local.file")))
-//        },"Windows-1251"))) {
 
             reader.readLine(); // skip first line
             while ((line = reader.readLine()) != null) {
@@ -60,7 +63,8 @@ public final class PutCSV {
                 }
             }
         } catch (IOException e) {
-            throw new IllegalStateException(e);
+            logger.error(e.getMessage());
+            throw new IllegalStateException("Error parse file");
         }
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm");

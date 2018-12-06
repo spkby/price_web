@@ -25,6 +25,6 @@ public class UpdateController extends HttpServlet {
             throw new IllegalStateException("Error Update Data: " + e.getMessage());
         }
 
-        resp.sendRedirect(getServletContext().getContextPath() + "/price?updated=ok");
+        resp.sendRedirect(getServletContext().getContextPath() + "/show?updated=ok");
     }
 }

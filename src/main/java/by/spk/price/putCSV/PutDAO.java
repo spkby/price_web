@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class PutDAO {
 
     private Map<String, Integer> brands;
@@ -31,6 +34,8 @@ public class PutDAO {
     private static final String ADD_PRICE = "INSERT INTO prices (brand_id, category_id, subcategory_id,"
             + "product_id,recommended) VALUES(?,?,?,?,?)";
 
+    private static Logger LOGGER = LoggerFactory.getLogger(PutDAO.class);
+
     protected Connection getConnection() {
         return JdbcConnection.getInstance();
     }
@@ -39,16 +44,14 @@ public class PutDAO {
         JdbcConnection.close(statement, resultSet);
     }
 
-    public PutDAO() {
-
-    }
-
     public void init() {
         try {
+            LOGGER.info("init");
             getConnection().setAutoCommit(false);
             fillMaps();
             clearPrices();
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
             throw new IllegalStateException("error init");
         }
     }
@@ -57,6 +60,7 @@ public class PutDAO {
         try {
             getConnection().setAutoCommit(true);
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
             throw new IllegalStateException("error finish");
         }
     }
@@ -71,6 +75,7 @@ public class PutDAO {
             statement.execute();
 
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
             throw new IllegalArgumentException("Error set Value by Key(" + key + "): " + e.getMessage());
         } finally {
             close(statement, null);
@@ -109,6 +114,7 @@ public class PutDAO {
             return id;
 
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
             throw new IllegalArgumentException("Error add new brand: " + brand);
         } finally {
             close(statement, key);
@@ -147,6 +153,7 @@ public class PutDAO {
             return id;
 
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
             throw new IllegalArgumentException("Error add new product:\n" + item + "\n" + product);
         } finally {
             close(statement, key);
@@ -184,6 +191,7 @@ public class PutDAO {
 
             return id;
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
             throw new IllegalArgumentException("Error add new category: " + category);
         } finally {
             close(statement, key);
@@ -223,6 +231,7 @@ public class PutDAO {
             return id;
 
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
             throw new IllegalArgumentException("Error add new subcategory: " + subCategory);
         } finally {
             close(statement, key);
@@ -242,11 +251,14 @@ public class PutDAO {
                 statement.setInt(5, price.getRecommendedPrice());
                 statement.addBatch();
             }
+            LOGGER.info("execute batch");
             statement.executeBatch();
 
             getConnection().commit();
+            LOGGER.info("commit");
 
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
             throw new IllegalArgumentException("Error add new prices" + "\n" + e);
         } finally {
             close(statement, null);
@@ -259,6 +271,7 @@ public class PutDAO {
             statement = getConnection().prepareStatement(CLEAR_PRICES);
             statement.executeUpdate();
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
             throw new IllegalArgumentException("Error clear prices");
         } finally {
             close(statement, null);
@@ -318,6 +331,7 @@ public class PutDAO {
             fillProducts(statement, result);
 
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
             throw new IllegalArgumentException("Error create maps");
         } finally {
             close(statement, result);

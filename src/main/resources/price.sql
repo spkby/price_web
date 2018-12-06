@@ -52,3 +52,5 @@ create table subcategories
 	subcategory varchar(255) not null
 );
 
+insert into datas (data_key,data_value) values ('updated','00-00-00 00-00');
+

@@ -1,9 +1,13 @@
 package by.spk.price;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.*;
 
 public class JdbcConnection {
 
+    private static Logger LOGGER = LoggerFactory.getLogger(JdbcConnection.class);
     private static Connection instance;
 
     private JdbcConnection() {
@@ -22,13 +26,15 @@ public class JdbcConnection {
 
         try {
             Class.forName(Utils.getPropertiesValue("db.drv"));
+            LOGGER.info("create connection");
             instance = DriverManager.getConnection(
                     Utils.getPropertiesValue("db.url"),
                     Utils.getPropertiesValue("db.user"),
                     Utils.getPropertiesValue("db.pass")
             );
         } catch (ClassNotFoundException | SQLException e) {
-            throw new IllegalStateException(e);
+            LOGGER.error(e.getMessage());
+            throw new IllegalStateException("Error creating connection");
         }
     }
 
@@ -37,6 +43,7 @@ public class JdbcConnection {
             try {
                 instance.close();
             } catch (SQLException e) {
+                LOGGER.error(e.getMessage());
                 throw new IllegalStateException("Error on destroy connection");
             }
         }
@@ -51,7 +58,8 @@ public class JdbcConnection {
                 resultSet.close();
             }
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
+            LOGGER.error(e.getMessage());
+            throw new IllegalStateException("Error close statement and resultSet");
         }
     }
 }

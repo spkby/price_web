@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title><c:out value="${urlDomain}"/>/<c:out value="${title}"/></title>
+    <title><c:out value="${applicationScope.urlDomain}"/>/<c:out value="${title}"/></title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -23,7 +23,7 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
 
-    <script src="${pageContext.request.contextPath}/price.js"></script>
+    <script src="<c:out value='${pageContext.request.contextPath}'/>/price.js"></script>
     </head>
 <body>
 <header></header>
