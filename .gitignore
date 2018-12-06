@@ -9,5 +9,5 @@
 /build/
 /src/main/resources/price.properties
 /src/main/webapp/index.html
-/gradlew*
+/gradlew.bat
 /src/main/resources/version.properties
