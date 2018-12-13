@@ -21,11 +21,8 @@ public final class PutCSV {
 
         final PutDAO putDao = new PutDAO();
         putDao.init();
-
         final List<Price> prices = new ArrayList<>();
 
-        String line;
-        final Price price = new Price();
         final Logger logger = LoggerFactory.getLogger(PutCSV.class);
 
         logger.info("read file");
@@ -34,13 +31,14 @@ public final class PutCSV {
                         new FileInputStream(new File(Utils.getPropertiesValue("csv.local.file"))),
                         "Windows-1251"))) {
 
+            String line;
             reader.readLine(); // skip first line
             while ((line = reader.readLine()) != null) {
 
                 line = line.replace("\"", "");
 
                 final String[] strings = line.split(";");
-                //price = new Price();
+                final Price price = new Price();
 
                 // Бренд
                 price.setBrandId(putDao.getId(PutDAO.Tables.BRAND, strings[0]));

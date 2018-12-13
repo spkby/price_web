@@ -47,9 +47,9 @@ public class WebDAO {
         try (PreparedStatement statement = getConnection().prepareStatement(PRICE_WHERE)) {
             statement.setString(1, "%" + where + "%");
             try (ResultSet rows = statement.executeQuery()) {
-                final WebPrice price = new WebPrice();
                 final List<WebPrice> prices = new ArrayList<>();
                 while (rows.next()) {
+                    final WebPrice price = new WebPrice();
                     price.setIdProd(rows.getInt("product_id"));
                     price.setIdPrice(rows.getInt(1));
                     price.setProduct(rows.getString("product"));
