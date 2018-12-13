@@ -28,11 +28,11 @@ public class WebDAO {
     }
 
     public String getValue(final String key) {
-        try (final PreparedStatement statement = getConnection().prepareStatement(SELECT_VALUE)) {
+        try (PreparedStatement statement = getConnection().prepareStatement(SELECT_VALUE)) {
             statement.setString(1, key);
-            try (final ResultSet rows = statement.executeQuery()) {
+            try (ResultSet rows = statement.executeQuery()) {
                 String value = "";
-                while (rows.next()) {
+                if (rows.next()) {
                     value = rows.getString(1);
                 }
                 return value;
@@ -44,24 +44,19 @@ public class WebDAO {
     }
 
     public List<WebPrice> show(final String where) {
-        try (final PreparedStatement statement = getConnection().prepareStatement(PRICE_WHERE)) {
+        try (PreparedStatement statement = getConnection().prepareStatement(PRICE_WHERE)) {
             statement.setString(1, "%" + where + "%");
-            try (final ResultSet rows = statement.executeQuery()) {
-
+            try (ResultSet rows = statement.executeQuery()) {
                 final WebPrice price = new WebPrice();
                 final List<WebPrice> prices = new ArrayList<>();
-
                 while (rows.next()) {
-
                     price.setIdProd(rows.getInt("product_id"));
                     price.setIdPrice(rows.getInt(1));
                     price.setProduct(rows.getString("product"));
                     price.setItem(rows.getString("item"));
                     price.setRecommendedPrice(rows.getDouble("recommended") / 100);
-
                     price.setOurPrice(new BigDecimal(price.getRecommendedPrice() * 0.77)
                             .setScale(2, RoundingMode.HALF_UP).doubleValue());
-
                     prices.add(price);
                 }
                 return prices;
