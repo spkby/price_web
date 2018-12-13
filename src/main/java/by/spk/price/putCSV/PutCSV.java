@@ -19,17 +19,14 @@ public final class PutCSV {
 
     public static void put() {
 
-        PutDAO putDao = new PutDAO();
+        final PutDAO putDao = new PutDAO();
         putDao.init();
 
-        List<Price> prices = new ArrayList<>();
+        final List<Price> prices = new ArrayList<>();
 
         String line;
-        String[] strings;
-        Price price;
-
+        final Price price = new Price();
         final Logger logger = LoggerFactory.getLogger(PutCSV.class);
-
 
         logger.info("read file");
         try (BufferedReader reader = new BufferedReader(
@@ -42,21 +39,20 @@ public final class PutCSV {
 
                 line = line.replace("\"", "");
 
-                strings = line.split(";");
-
-                price = new Price();
+                final String[] strings = line.split(";");
+                //price = new Price();
 
                 // Бренд
-                price.setBrandId(putDao.getBrandId(strings[0]));
+                price.setBrandId(putDao.getId(PutDAO.Tables.BRAND, strings[0]));
                 // Категория (группа товаров)
-                price.setCategoryId(putDao.getCategoryId(strings[1]));
+                price.setCategoryId(putDao.getId(PutDAO.Tables.CATEGORY, strings[1]));
                 // Подкатегория
-                price.setSubCategoryId(putDao.getSubCategoryId(strings[2]));
+                price.setSubCategoryId(putDao.getId(PutDAO.Tables.SUBCATEGORY, strings[2]));
                 // Артикул товара
                 // Название (артикул) товара
-                price.setProductId(putDao.getProductId(strings[3], strings[4]));
+                price.setProductId(putDao.getId(PutDAO.Tables.PRODUCT, strings[3], strings[4]));
                 // Цена
-                price.setRecommendedPrice((int) (Double.parseDouble(strings[5]) * 100));
+                price.setRecommendedPrice(Double.valueOf(Double.parseDouble(strings[5]) * 100).longValue());
 
                 if (!prices.contains(price)) {
                     prices.add(price);

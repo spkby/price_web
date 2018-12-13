@@ -13,10 +13,14 @@ import org.slf4j.LoggerFactory;
 
 public class PutDAO {
 
-    private Map<String, Integer> brands;
-    private Map<String, Integer> categories;
-    private Map<String, Integer> subCategories;
-    private Map<String, Integer> products;
+    enum Tables {
+        BRAND, CATEGORY, SUBCATEGORY, PRODUCT
+    }
+
+    private Map<String, Long> brands;
+    private Map<String, Long> categories;
+    private Map<String, Long> subCategories;
+    private Map<String, Long> products;
 
     private static final String UPDATE_VALUE = "UPDATE datas SET data_value = ? WHERE data_key = ?;";
 
@@ -36,15 +40,11 @@ public class PutDAO {
 
     private static Logger LOGGER = LoggerFactory.getLogger(PutDAO.class);
 
-    protected Connection getConnection() {
+    private Connection getConnection() {
         return JdbcConnection.getInstance();
     }
 
-    protected void close(final Statement statement, final ResultSet resultSet) {
-        JdbcConnection.close(statement, resultSet);
-    }
-
-    public void init() {
+    void init() {
         try {
             LOGGER.info("init");
             getConnection().setAutoCommit(false);
@@ -56,7 +56,7 @@ public class PutDAO {
         }
     }
 
-    public void finish() {
+    void finish() {
         try {
             getConnection().setAutoCommit(true);
         } catch (SQLException e) {
@@ -65,190 +65,79 @@ public class PutDAO {
         }
     }
 
-    public void setValue(final String key, final String value) {
-        PreparedStatement statement = null;
-
-        try {
-            statement = getConnection().prepareStatement(UPDATE_VALUE);
+    void setValue(final String key, final String value) {
+        try (PreparedStatement statement = getConnection().prepareStatement(UPDATE_VALUE)) {
             statement.setNString(1, value);
             statement.setNString(2, key);
             statement.execute();
-
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
             throw new IllegalArgumentException("Error set Value by Key(" + key + "): " + e.getMessage());
-        } finally {
-            close(statement, null);
         }
     }
 
-    public int getBrandId(final String brand) {
+    Long getId(final Tables table, final String... values) {
+        final Long id;
+        final String sql;
+        final Map<String, Long> map;
+        switch (table) {
+            case BRAND:
+                sql = ADD_BRAND;
+                map = brands;
+                break;
+            case CATEGORY:
+                sql = ADD_CATEGORY;
+                map = categories;
+                break;
+            case SUBCATEGORY:
+                sql = ADD_SUBCATEGORY;
+                map = subCategories;
+                break;
+            case PRODUCT:
+                sql = ADD_PRODUCT;
+                map = products;
+                break;
+            default:
+                throw new IllegalArgumentException("Wrong 'case' in getId");
+        }
 
-        int id;
-
-        if (brands.containsKey(brand)) {
-            id = brands.get(brand);
+        if (map.containsKey(values[0])) {
+            id = map.get(values[0]);
         } else {
-            id = addBrand(brand);
+            id = add(table, map, sql, values);
         }
         return id;
     }
 
-    private int addBrand(final String brand) {
-        PreparedStatement statement = null;
-        ResultSet key = null;
-        int id = -1;
-        try {
-            statement = getConnection().prepareStatement(ADD_BRAND, Statement.RETURN_GENERATED_KEYS);
-
-            statement.setNString(1, brand);
-            statement.executeUpdate();
-
-            key = statement.getGeneratedKeys();
-
-            if (key.next()) {
-                id = key.getInt(1);
-                brands.put(brand, id);
+    private Long add(final Tables table, final Map<String, Long> map, final String sql, final String... values) {
+        try (PreparedStatement statement = getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setNString(1, values[0]);
+            if (values.length > 1) {
+                statement.setNString(2, values[1]);
             }
-
-            return id;
-
+            statement.executeUpdate();
+            try (ResultSet key = statement.getGeneratedKeys()) {
+                Long id = null;
+                if (key.next()) {
+                    id = key.getLong(1);
+                    map.put(values[0], id);
+                }
+                return id;
+            }
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
-            throw new IllegalArgumentException("Error add new brand: " + brand);
-        } finally {
-            close(statement, key);
+            throw new IllegalArgumentException("Error add new " + table.name() + ": " + values);
         }
     }
 
-    public int getProductId(final String item, final String product) {
-        int id;
-
-        if (products.containsKey(item)) {
-            id = products.get(item);
-        } else {
-            id = addProduct(item, product);
-        }
-        return id;
-    }
-
-    private int addProduct(final String item, final String product) {
-        PreparedStatement statement = null;
-        ResultSet key = null;
-
-        int id = -1;
-        try {
-            statement = getConnection().prepareStatement(ADD_PRODUCT, Statement.RETURN_GENERATED_KEYS);
-
-            statement.setNString(1, item);
-            statement.setNString(2, product);
-            statement.executeUpdate();
-
-            key = statement.getGeneratedKeys();
-
-            if (key.next()) {
-                id = key.getInt(1);
-                products.put(item, id);
-            }
-            return id;
-
-        } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
-            throw new IllegalArgumentException("Error add new product:\n" + item + "\n" + product);
-        } finally {
-            close(statement, key);
-        }
-    }
-
-    public int getCategoryId(final String category) {
-
-        int id;
-
-        if (categories.containsKey(category)) {
-            id = categories.get(category);
-        } else {
-            id = addCategory(category);
-        }
-        return id;
-    }
-
-    private int addCategory(final String category) {
-        PreparedStatement statement = null;
-        ResultSet key = null;
-        int id = -1;
-        try {
-            statement = getConnection().prepareStatement(ADD_CATEGORY, Statement.RETURN_GENERATED_KEYS);
-
-            statement.setNString(1, category);
-            statement.executeUpdate();
-
-            key = statement.getGeneratedKeys();
-
-            if (key.next()) {
-                id = key.getInt(1);
-                categories.put(category, id);
-            }
-
-            return id;
-        } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
-            throw new IllegalArgumentException("Error add new category: " + category);
-        } finally {
-            close(statement, key);
-        }
-    }
-
-    public int getSubCategoryId(final String subCategory) {
-
-        int id;
-
-        if (subCategories.containsKey(subCategory)) {
-            id = subCategories.get(subCategory);
-        } else {
-            id = addSubCategory(subCategory);
-        }
-        return id;
-    }
-
-    private int addSubCategory(final String subCategory) {
-        PreparedStatement statement = null;
-        ResultSet key = null;
-
-        int id = -1;
-        try {
-            statement = getConnection().prepareStatement(ADD_SUBCATEGORY, Statement.RETURN_GENERATED_KEYS);
-
-//            statement.setString(1, "Тест");
-            statement.setString(1, subCategory);
-            statement.executeUpdate();
-
-            key = statement.getGeneratedKeys();
-
-            if (key.next()) {
-                id = key.getInt(1);
-                subCategories.put(subCategory, id);
-            }
-            return id;
-
-        } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
-            throw new IllegalArgumentException("Error add new subcategory: " + subCategory);
-        } finally {
-            close(statement, key);
-        }
-    }
-
-    public void addPrices(final List<Price> prices) {
-        PreparedStatement statement = null;
-        try {
-            statement = getConnection().prepareStatement(ADD_PRICE);
-
+    void addPrices(final List<Price> prices) {
+        try (PreparedStatement statement = getConnection().prepareStatement(ADD_PRICE)) {
             for (Price price : prices) {
-                statement.setInt(1, price.getBrandId());
-                statement.setInt(2, price.getCategoryId());
-                statement.setInt(3, price.getSubCategoryId());
-                statement.setInt(4, price.getProductId());
-                statement.setInt(5, price.getRecommendedPrice());
+                statement.setLong(1, price.getBrandId());
+                statement.setLong(2, price.getCategoryId());
+                statement.setLong(3, price.getSubCategoryId());
+                statement.setLong(4, price.getProductId());
+                statement.setLong(5, price.getRecommendedPrice());
                 statement.addBatch();
             }
             LOGGER.info("execute batch");
@@ -260,81 +149,38 @@ public class PutDAO {
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
             throw new IllegalArgumentException("Error add new prices" + "\n" + e);
-        } finally {
-            close(statement, null);
         }
     }
 
     private void clearPrices() {
-        PreparedStatement statement = null;
-        try {
-            statement = getConnection().prepareStatement(CLEAR_PRICES);
+        try (PreparedStatement statement = getConnection().prepareStatement(CLEAR_PRICES)) {
             statement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
             throw new IllegalArgumentException("Error clear prices");
-        } finally {
-            close(statement, null);
         }
     }
 
-    private void fillBrands(Statement statement, ResultSet result) throws SQLException {
-
-        brands = new HashMap<>();
-        statement.execute(GET_BRANDS);
-        result = statement.getResultSet();
-        while (result.next()) {
-            brands.put(result.getString("brand"), result.getInt("id"));
-        }
-    }
-
-    private void fillCategories(Statement statement, ResultSet result) throws SQLException {
-
-        categories = new HashMap<>();
-        statement.execute(GET_CATEGORIES);
-        result = statement.getResultSet();
-        while (result.next()) {
-            categories.put(result.getString("category"), result.getInt("id"));
-        }
-    }
-
-    private void fillSubCategories(final Statement statement, ResultSet result) throws SQLException {
-
-        subCategories = new HashMap<>();
-        statement.execute(GET_SUBCATEGORIES);
-        result = statement.getResultSet();
-        while (result.next()) {
-            subCategories.put(result.getString("subcategory"), result.getInt("id"));
-        }
-    }
-
-    private void fillProducts(final Statement statement, ResultSet result) throws SQLException {
-
-        products = new HashMap<>();
-        statement.execute(GET_PRODUCTS);
-        result = statement.getResultSet();
-        while (result.next()) {
-            products.put(result.getString("item"), result.getInt("id"));
+    private Map<String, Long> fillMap(final String sql, final String field) {
+        try (final PreparedStatement statement = getConnection().prepareStatement(sql)) {
+            try (final ResultSet result = statement.executeQuery()) {
+                final Map<String, Long> map = new HashMap<>();
+                while (result.next()) {
+                    map.put(result.getString(field), result.getLong("id"));
+                }
+                return map;
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+            throw new IllegalArgumentException("Error create " + field + " maps");
         }
     }
 
     private void fillMaps() {
-        Statement statement = null;
-        ResultSet result = null;
+        brands = fillMap(GET_BRANDS, "brand");
+        categories = fillMap(GET_CATEGORIES, "category");
+        subCategories = fillMap(GET_SUBCATEGORIES, "subcategory");
+        products = fillMap(GET_PRODUCTS, "item");
 
-        try {
-            statement = getConnection().createStatement();
-
-            fillBrands(statement, result);
-            fillCategories(statement, result);
-            fillSubCategories(statement, result);
-            fillProducts(statement, result);
-
-        } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
-            throw new IllegalArgumentException("Error create maps");
-        } finally {
-            close(statement, result);
-        }
     }
 }
