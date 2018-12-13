@@ -35,7 +35,7 @@ dependencies {
 }
 
 war {
-    archiveName = 'pila_new.war'
+    archiveName = 'new.war'
 }
 
 task createProperties {
