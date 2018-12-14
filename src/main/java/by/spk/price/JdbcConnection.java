@@ -9,6 +9,8 @@ public class JdbcConnection {
 
     private static Logger LOGGER = LoggerFactory.getLogger(JdbcConnection.class);
     private static Connection instance;
+    private static long timeOut = Long.parseLong(Utils.getPropertiesValue("db.timeout")) * 1000;
+    private static long lastSession = System.currentTimeMillis();
 
     private JdbcConnection() {
     }
@@ -19,7 +21,10 @@ public class JdbcConnection {
     }
 
     private static void buildConnection() {
-
+        if ((System.currentTimeMillis() - lastSession) > timeOut) {
+            destroyConnection();
+        }
+        lastSession = System.currentTimeMillis();
         if (instance != null) {
             return;
         }
@@ -42,24 +47,11 @@ public class JdbcConnection {
         if (instance != null) {
             try {
                 instance.close();
+                instance = null;
             } catch (SQLException e) {
                 LOGGER.error(e.getMessage());
                 throw new IllegalStateException("Error on destroy connection");
             }
-        }
-    }
-
-    public static void close(final Statement statement, final ResultSet resultSet) {
-        try {
-            if (statement != null) {
-                statement.close();
-            }
-            if (resultSet != null) {
-                resultSet.close();
-            }
-        } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
-            throw new IllegalStateException("Error close statement and resultSet");
         }
     }
 }

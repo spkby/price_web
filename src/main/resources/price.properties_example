@@ -2,6 +2,7 @@ db.drv=com.mysql.cj.jdbc.Driver
 db.url=jdbc:mysql://localhost:3306/price_db?characterEncoding=UTF-8
 db.user=root
 db.pass=pass
+db.timeout=28800
 
 csv.login=login
 csv.pass=password
