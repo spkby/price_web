@@ -14,8 +14,12 @@ public class Utils {
         try {
             java.util.Properties properties = new java.util.Properties();
             properties.load(Utils.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE_PATH));
-            return properties.getProperty(key);
-        } catch (IOException e) {
+            final String value = properties.getProperty(key);
+            if (value == null) {
+                throw new IllegalArgumentException("not found property with name: " + key);
+            }
+            return value;
+        } catch (IOException | IllegalArgumentException e) {
             LOGGER.error(e.getMessage());
             throw new IllegalStateException(e);
         }
@@ -25,7 +29,17 @@ public class Utils {
         try {
             java.util.Properties properties = new java.util.Properties();
             properties.load(Utils.class.getClassLoader().getResourceAsStream(VERSION_FILE_PATH));
-            return properties.getProperty("version") + " (" + properties.getProperty("date") + ")";
+
+            final String version = properties.getProperty("version");
+            if (version == null) {
+                throw new IllegalArgumentException("not found 'version' in " + VERSION_FILE_PATH);
+            }
+            final String date = properties.getProperty("date");
+            if (date == null) {
+                throw new IllegalArgumentException("not found 'date' in " + VERSION_FILE_PATH);
+            }
+            return version + " (" + date + ")";
+
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
             throw new IllegalStateException(e);
