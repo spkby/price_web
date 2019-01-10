@@ -1,4 +1,4 @@
-package by.spk.price.putCSV;
+package by.spk.price.updateDb;
 
 import by.spk.price.entity.Price;
 import by.spk.price.Utils;
@@ -12,18 +12,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public final class PutCSV {
+public final class UpdateDb {
 
-    private PutCSV() {
-    }
+    public void update() {
 
-    public static void put() {
-
-        final PutDAO putDao = new PutDAO();
-        putDao.init();
+        final CsvDao csvDao = new CsvDao();
+        csvDao.init();
         final List<Price> prices = new ArrayList<>();
 
-        final Logger logger = LoggerFactory.getLogger(PutCSV.class);
+        final Logger logger = LoggerFactory.getLogger(UpdateDb.class);
 
         logger.info("read file");
         try (BufferedReader reader = new BufferedReader(
@@ -41,14 +38,14 @@ public final class PutCSV {
                 final Price price = new Price();
 
                 // Бренд
-                price.setBrandId(putDao.getId(PutDAO.Tables.BRAND, strings[0]));
+                price.setBrandId(csvDao.getId(CsvDao.Tables.BRAND, strings[0]));
                 // Категория (группа товаров)
-                price.setCategoryId(putDao.getId(PutDAO.Tables.CATEGORY, strings[1]));
+                price.setCategoryId(csvDao.getId(CsvDao.Tables.CATEGORY, strings[1]));
                 // Подкатегория
-                price.setSubCategoryId(putDao.getId(PutDAO.Tables.SUBCATEGORY, strings[2]));
+                price.setSubCategoryId(csvDao.getId(CsvDao.Tables.SUBCATEGORY, strings[2]));
                 // Артикул товара
                 // Название (артикул) товара
-                price.setProductId(putDao.getId(PutDAO.Tables.PRODUCT, strings[3], strings[4]));
+                price.setProductId(csvDao.getId(CsvDao.Tables.PRODUCT, strings[3], strings[4]));
                 // Цена
                 price.setRecommendedPrice(Double.valueOf(Double.parseDouble(strings[5]) * 100).longValue());
 
@@ -63,8 +60,8 @@ public final class PutCSV {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd HH:mm");
         formatter.setTimeZone(TimeZone.getTimeZone("Europe/Minsk"));
-        putDao.setValue("updated", formatter.format(new Date()));
-        putDao.addPrices(prices);
-        putDao.finish();
+        csvDao.setValue("updated", formatter.format(new Date()));
+        csvDao.addPrices(prices);
+        csvDao.finish();
     }
 }

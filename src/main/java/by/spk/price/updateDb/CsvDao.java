@@ -1,4 +1,4 @@
-package by.spk.price.putCSV;
+package by.spk.price.updateDb;
 
 import by.spk.price.JdbcConnection;
 import by.spk.price.entity.Price;
@@ -11,7 +11,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PutDAO {
+public class CsvDao {
 
     enum Tables {
         BRAND, CATEGORY, SUBCATEGORY, PRODUCT
@@ -38,7 +38,7 @@ public class PutDAO {
     private static final String ADD_PRICE = "INSERT INTO prices (brand_id, category_id, subcategory_id,"
             + "product_id,recommended) VALUES(?,?,?,?,?)";
 
-    private static Logger LOGGER = LoggerFactory.getLogger(PutDAO.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(CsvDao.class);
 
     private Connection getConnection() {
         return JdbcConnection.getInstance();

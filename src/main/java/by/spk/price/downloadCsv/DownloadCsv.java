@@ -1,4 +1,4 @@
-package by.spk.price.getCSV;
+package by.spk.price.downloadCsv;
 
 import java.io.*;
 
@@ -12,15 +12,12 @@ import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class GetCSV {
+public final class DownloadCsv {
 
-    private GetCSV() {
-    }
+    public void download() {
 
-    public static void get() {
-
-        final Logger logger = LoggerFactory.getLogger(GetCSV.class);
-        HttpClient httpClient = null;
+        final Logger logger = LoggerFactory.getLogger(DownloadCsv.class);
+//        HttpClient httpClient = null;
         try {
             final String login = Utils.getPropertiesValue("csv.login");
             final String password = Utils.getPropertiesValue("csv.pass");
@@ -30,7 +27,7 @@ public final class GetCSV {
             final String urlFile = Utils.getPropertiesValue("csv.url.file");
             final String pathFile = Utils.getPropertiesValue("csv.local.file");
 
-            httpClient = HttpClients.createDefault();
+            final HttpClient httpClient = HttpClients.createDefault();
             HttpResponse response;
 
             HttpPost httpPost = new HttpPost(urlLogin + "?"
@@ -43,7 +40,7 @@ public final class GetCSV {
 //            if (response != null) response.getEntity().consumeContent();
 
             HttpGet httpget = new HttpGet(urlFile);
-            logger.info("get file");
+            logger.info("download file");
             response = httpClient.execute(httpget);
 
             HttpEntity entity = response.getEntity();
@@ -64,7 +61,7 @@ public final class GetCSV {
 
         } catch (IOException e) {
             logger.error(e.getMessage());
-            throw new IllegalStateException("Error get file");
+            throw new IllegalStateException("Error download file");
         }
 //        finally {
 //            httpClient.getConnectionManager().shutdown();

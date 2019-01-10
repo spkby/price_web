@@ -39,7 +39,7 @@ public class WebDAO {
             }
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
-            throw new IllegalArgumentException("Error get Value by Key(" + key + "): " + e.getMessage());
+            throw new IllegalArgumentException("Error download Value by Key(" + key + "): " + e.getMessage());
         }
     }
 
@@ -63,7 +63,7 @@ public class WebDAO {
             }
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
-            throw new IllegalArgumentException("Error get Prices: " + e.getMessage());
+            throw new IllegalArgumentException("Error download Prices: " + e.getMessage());
         }
     }
 }
