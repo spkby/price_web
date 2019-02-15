@@ -42,7 +42,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm">
-            <form action="<c:url value='/show'/>" method="get">
+            <form action="<c:url value='/'/>" method="get">
                 <div class="input-group mb-3">
                     <input type="text" name="product" value="<c:out value="${product}"/>"
                            class="form-control form-control-sm"

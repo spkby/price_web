@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/show")
+@WebServlet("/")
 public class ShowController extends HttpServlet {
 
     private WebDAO dao;
@@ -67,7 +67,7 @@ public class ShowController extends HttpServlet {
         req.setAttribute("dateUpdated", dao.getValue("updated"));
 //        req.setAttribute("ver", Utils.getVersion());
 
-        req.getServletContext().getRequestDispatcher("/WEB-INF/price.jsp").forward(req, resp);
+        req.getServletContext().getRequestDispatcher("/WEB-INF/show.jsp").forward(req, resp);
     }
 
     @Override

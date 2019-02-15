@@ -1,15 +1,15 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="header.jsp" %>
 <div class="jumbotron">
-    <form action="<c:url value='/login'/>" method="post" class="needs-validation" novalidate>
+    <form action="j_security_check" method="post" class="needs-validation" novalidate>
         <div class="form-group">
-            <input type="text" class="form-control" name="login" placeholder="Login" required>
+            <input type="text" class="form-control" name="j_username" placeholder="Login" required>
             <div class="invalid-feedback">
                 Please enter login.
             </div>
         </div>
         <div class="form-group">
-            <input type="password" class="form-control" name="password" placeholder="Password" required>
+            <input type="password" class="form-control" name="j_password" placeholder="Password" required>
             <div class="invalid-feedback">
                 Please enter password.
             </div>

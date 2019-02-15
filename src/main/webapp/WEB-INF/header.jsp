@@ -23,7 +23,7 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
 
-    <script src="<c:out value='${pageContext.request.contextPath}'/>/price.js"></script>
+    <script src="http://pila.by/price.js"></script>
     </head>
 <body>
 <header></header>
