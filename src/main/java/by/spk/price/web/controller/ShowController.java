@@ -21,28 +21,27 @@ public class ShowController extends HttpServlet {
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
             throws ServletException, IOException {
 
-        /*int limit = 1000;
-        int offset = 0;
+//        int limit = 1000;
+//        int offset = 0;
+//
+//        String str = req.getParameter("limit");
+//        if (str != null && !str.isEmpty()) {
+//            try {
+//                limit = Integer.parseInt(str.trim());
+//            } catch (NumberFormatException e) {
+//                limit = 0;
+//            }
+//        }
+//        str = req.getParameter("offset");
+//        if (str != null && !str.isEmpty()) {
+//            try {
+//                offset = Integer.parseInt(str.trim());
+//            } catch (NumberFormatException e) {
+//                offset = 0;
+//            }
+//        }
 
-        String str = req.getParameter("limit");
-        if (str != null && !str.isEmpty()) {
-            try {
-                limit = Integer.parseInt(str.trim());
-            } catch (NumberFormatException e) {
-                limit = 0;
-            }
-        }
-        str = req.getParameter("offset");
-        if (str != null && !str.isEmpty()) {
-            try {
-                offset = Integer.parseInt(str.trim());
-            } catch (NumberFormatException e) {
-                offset = 0;
-            }
-        }
-        */
-
-        Boolean updated = false;
+        boolean updated = false;
 
         final String str = req.getParameter("updated");
         if (str != null && !str.isEmpty()) {
@@ -57,10 +56,8 @@ public class ShowController extends HttpServlet {
             req.setAttribute("product", product);
         }
         req.setAttribute("updated", updated);
-        //if (limit > 0) req.setAttribute("limit", limit);
-
-        //
-
+//        if (limit > 0) req.setAttribute("limit", limit);
+//
 //        req.setAttribute("urlDomain", Utils.getPropertiesValue("web.url.domain"));
 //        req.setAttribute("urlSearch", Utils.getPropertiesValue("web.url.search"));
         req.setAttribute("title", "price");
