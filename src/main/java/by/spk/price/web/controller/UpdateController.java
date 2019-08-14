@@ -40,6 +40,6 @@ public class UpdateController extends HttpServlet {
             }
         });
 
-        resp.sendRedirect(getServletContext().getContextPath() + "/show?updated=ok");
+        resp.sendRedirect(getServletContext().getContextPath() + "/?updated=ok");
     }
 }

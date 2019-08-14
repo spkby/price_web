@@ -13,11 +13,5 @@ csv.url.file=http://domain.com/path_to_export/
 
 csv.local.file=catalog.csv
 
-web.login=login
-web.password=pass
-
 web.url.search=http://domain.com/path/?query
 web.url.domain=domain.com
-
-web.cookie.key=cookie.key
-web.cookie.value=cookie.value
