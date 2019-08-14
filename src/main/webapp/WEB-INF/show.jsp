@@ -4,7 +4,7 @@
     <c:if test="${updated}">
     $(document).ready(function () {
         $("#updatedModal").modal();
-    })
+    });
     </c:if>
 </script>
 <!-- updatedModal -->
@@ -82,7 +82,6 @@
 </div>
 
 <c:if test="${product != null}">
-    <%--<form id="upd" action="<c:url value='/save'/>" method="post">--%>
     <div class="container-fluid">
         <table class="table table-bordered table-sm table-striped">
             <thead>
@@ -106,12 +105,6 @@
                         </div>
                     </div>
                 </th>
-                <!--<th class="text-primary">Итоговая
-                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                            data-target="#updateProductModal">
-                        Сохранить
-                    </button>
-                </th>-->
             </tr>
             </thead>
             <!-- Modal -->
@@ -135,7 +128,8 @@
             <c:forEach items="${prices}" var="price">
                 <tr>
                     <td class="align-middle" style="width: 140px" align="center">
-                        <a href="<c:out value='${applicationScope.urlSearch}'/>=<c:out value="${price.item}"/>" target="_blank">
+                        <a href="<c:out value='${applicationScope.urlSearch}'/>=<c:out value="${price.item}"/>"
+                           target="_blank">
                                 ${price.item}
                         </a>
                     </td>
@@ -160,6 +154,5 @@
             </tbody>
         </table>
     </div>
-    <%--</form>--%>
 </c:if>
 <%@ include file="footer.jsp" %>
