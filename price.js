@@ -8,12 +8,11 @@ $(document).ready(function () {
             return false;
         }
     });
-
     calcPriceCommonAll();
-})
+});
 
 function chkNaN(val) {
-    if (isNaN(val) || val == "" || val === null) val = 0;
+    if (isNaN(val) || val === "" || val === null) val = 0;
     return val;
 }
 
@@ -24,16 +23,16 @@ function calcPercent(id) {
     $('#percent_' + id).val(chkNaN(percent));
 }
 
-function increase(id) {
-    $('#percent_' + id).val(chkNaN(parseInt($('#percent_' + id).val())) + 1);
-    calcLastPrice(id);
-}
-
-function decrease(id) {
-    $('#percent_' + id).val(chkNaN(parseInt($('#percent_' + id).val())) - 1);
-    calcLastPrice(id);
-}
-
+// function increase(id) {
+//     $('#percent_' + id).val(chkNaN(parseInt($('#percent_' + id).val())) + 1);
+//     calcLastPrice(id);
+// }
+//
+// function decrease(id) {
+//     $('#percent_' + id).val(chkNaN(parseInt($('#percent_' + id).val())) - 1);
+//     calcLastPrice(id);
+// }
+//
 // function calcLastPrice(id) {
 //     var percent = parseFloat($('#percent_' + id).val());
 //     var price = parseFloat($('#price_' + id).text());
@@ -44,10 +43,7 @@ function decrease(id) {
 function isNumber(evt) {
     evt = (evt) ? evt : window.event;
     var charCode = (evt.which) ? evt.which : evt.keyCode;
-    if ((charCode > 31 && charCode < 48) || charCode > 57) {
-        return false;
-    }
-    return true;
+    return !((charCode > 31 && charCode < 48) || charCode > 57);
 }
 
 function updatingModal() {
@@ -65,15 +61,14 @@ function decreaseCommon() {
 }
 
 function calcPriceCommonAll() {
-
-    array = $('.priceCommon');
-    percent = parseFloat($('#percentCommon').val());
-    for (i = 0; i < array.length; i++) {
+    var array = $('.priceCommon');
+    var percent = parseFloat($('#percentCommon').val());
+    for (var i = 0; i < array.length; i++) {
         //commonId = array[i].getAttribute("id");
-        priceId = array[i].getAttribute("value");
-        common = '#priceCommon_' + priceId;
-        nds = '#priceNoNDS_' + priceId;
-        price = parseFloat($('#price_' + priceId).text());
+        var priceId = array[i].getAttribute("value");
+        var common = '#priceCommon_' + priceId;
+        var nds = '#priceNoNDS_' + priceId;
+        var price = parseFloat($('#price_' + priceId).text());
         price = chkNaN(price * (1 + percent / 100));
         $(common).text(price.toFixed(2));
         $(nds).text((price/1.2).toFixed(2));
